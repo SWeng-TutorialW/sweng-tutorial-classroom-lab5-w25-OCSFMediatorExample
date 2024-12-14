@@ -27,7 +27,7 @@ public class App extends Application {
     	EventBus.getDefault().register(this);
     	client = SimpleClient.getClient();
     	client.openConnection();
-        scene = new Scene(loadFXML("primary"), 640, 480);
+      scene = new Scene(loadFXML("primary"), 400, 600);
         stage.setScene(scene);
         stage.show();
     }
@@ -60,11 +60,11 @@ public class App extends Application {
         					event.getWarning().getMessage(),
         					event.getWarning().getTime().toString())
         	);
+            System.out.println("in App sub  Warning event");
         	alert.show();
     	});
     	
     }
-
 	public static void main(String[] args) {
         launch();
     }

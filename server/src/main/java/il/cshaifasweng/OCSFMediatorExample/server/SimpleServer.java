@@ -20,18 +20,23 @@ public class SimpleServer extends AbstractServer {
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		String msgString = msg.toString();
-		if (msgString.startsWith("#warning")) {
-			Warning warning = new Warning("Warning from server!");
-			try {
-				client.sendToClient(warning);
-				System.out.format("Sent warning to client %s\n", client.getInetAddress().getHostAddress());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		else if(msgString.startsWith("add client")){
+		if(msgString.startsWith("add client"))
+		{
 			SubscribedClient connection = new SubscribedClient(client);
 			SubscribersList.add(connection);
+			try {
+				if (SubscribersList.size() == 2) {
+
+					SubscribersList.getFirst().getClient().sendToClient("X");
+					SubscribersList.getLast().getClient().sendToClient("O");
+				} else {
+					SubscribersList.getFirst().getClient().sendToClient("waiting for another player");
+				}
+			}
+			catch (IOException e)
+				{
+					throw new RuntimeException(e);
+				}
 			try {
 				client.sendToClient("client added successfully");
 			} catch (IOException e) {
@@ -47,6 +52,10 @@ public class SimpleServer extends AbstractServer {
 					}
 				}
 			}
+		}
+		else if(msgString.startsWith("#Button"))
+		{
+			System.out.println(msgString);
 		}
 	}
 	public void sendToAllClients(String message) {
