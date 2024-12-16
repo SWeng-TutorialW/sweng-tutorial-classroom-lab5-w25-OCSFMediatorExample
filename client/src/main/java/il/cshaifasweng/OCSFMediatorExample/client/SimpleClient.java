@@ -24,6 +24,10 @@ public class SimpleClient extends AbstractClient {
 			getClient().setID(message);
 			EventBus.getDefault().post(new newGameEvent(message));
 		}
+		if(message.contains("wait"))
+		{
+			EventBus.getDefault().post(new playerMoveEvent(message));
+		}
 		if(message.startsWith("#newMove,"))
 		{
 			EventBus.getDefault().post(new playerMoveEvent(message));

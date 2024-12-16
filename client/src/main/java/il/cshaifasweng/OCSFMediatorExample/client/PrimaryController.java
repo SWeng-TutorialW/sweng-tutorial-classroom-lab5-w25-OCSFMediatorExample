@@ -134,18 +134,21 @@ public class PrimaryController {
 			Button button = buttonStringMap.get(event.buttonId);
 			playerTurn.setText("Turn: "+event.turn);
 			button.setText(event.player);
-//			if(playerTurn.getText().equals(SimpleClient.getClient().getID()))
-//			{
-//				for (Button a : buttonStringMap.values()) {
-//					button.setDisable(false); // Disable the button
-//				}
-//			}
-//			else
-//			{
-//				for (Button a : buttonStringMap.values()) {
-//					button.setDisable(true); // Enable the button
-//				}
-//			}
+			System.out.println("turn- "+event.turn);
+			System.out.println("player- "+SimpleClient.getClient().getID());
+			if(event.turn.equals(SimpleClient.getClient().getID()))
+			{
+				System.out.println("in primary contrler PlayerMove");
+				buttonStringMap.forEach((key, value) ->{
+					value.setDisable(false); // Disable the button
+				});
+			}
+			else
+			{
+				buttonStringMap.forEach((key, value) ->{
+					value.setDisable(true); // Disable the button
+				});
+			}
 		}
 		);
 	}
@@ -155,6 +158,12 @@ public class PrimaryController {
 					Player.setText("Player: "+event.player);
 				}
 		);
+		if(SimpleClient.getClient().getID().equals("X"))
+		{
+			buttonStringMap.forEach((key, value) ->{
+				value.setDisable(true); // Disable the button
+			});
+		}
 	}
 
 }

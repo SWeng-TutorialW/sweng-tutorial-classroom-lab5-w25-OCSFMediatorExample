@@ -29,7 +29,7 @@ public class App extends Application {
         this.controller = new PrimaryController();
     	client = SimpleClient.getClient();
     	client.openConnection();
-      scene = new Scene(loadFXML("primary"), 400, 600);
+      scene = new Scene(loadFXML("primary"));
         stage.setScene(scene);
         stage.show();
     }
