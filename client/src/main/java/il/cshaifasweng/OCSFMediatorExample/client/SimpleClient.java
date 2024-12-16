@@ -24,20 +24,18 @@ public class SimpleClient extends AbstractClient {
 			getClient().setID(message);
 			System.out.format("My ID is :%s%n", ID);
 		}
-		if(message.contains("is winner"))
+		if(message.startsWith("#newMove,"))
 		{
-			String winner=message.substring(0,0);
-			System.out.format("the winner is :%s%n", winner);
-			EventBus.getDefault().post(new WinEvent(winner));
-		}
-		if(message.startsWith("#continue"))
-		{
-			System.out.println("in continue");
 			EventBus.getDefault().post(new playerMoveEvent(message));
 		}
+		if(message.contains("is the winner"))
+		{
+			String winner=message.substring(26,27);
+			EventBus.getDefault().post(new WinEvent(winner));
+		}
+
 			System.out.println(message);
 	}
-
 	public static SimpleClient getClient() {
 		if (client == null) {
 			client = new SimpleClient("localhost", 3000);

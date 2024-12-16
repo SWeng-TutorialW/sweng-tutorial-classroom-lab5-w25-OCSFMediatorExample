@@ -6,13 +6,22 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import java.awt.event.InputMethodEvent;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 
 public class PrimaryController {
+
 	@FXML // fx:id="Button00"
 	private Button Button00; // Value injected by FXMLLoader
 
@@ -46,6 +55,8 @@ public class PrimaryController {
 	@FXML // fx:id="root"
 	private AnchorPane root; // Value injected by FXMLLoader
 
+	private Map<String,Button> buttonStringMap = new HashMap<String,Button>();
+
 	@FXML
 	void sendWarning(ActionEvent event) {
 		try {
@@ -57,11 +68,16 @@ public class PrimaryController {
 		}
 	}
 
-
 	@FXML
 	void initialize(){
 		System.out.println("initialize");
 		try {
+			EventBus.getDefault().register(this);
+			for(Node node : XOMatrix.getChildren())
+			{
+				buttonStringMap.put(node.getId(),(Button)node);
+				System.out.println(node.getId());
+			}
 			SimpleClient.getClient().sendToServer("add client");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -81,7 +97,7 @@ public class PrimaryController {
 		row = (row == null) ? 0 : row;
 		col = (col == null) ? 0 : col;
 		//SimpleClient.getClient().sendButtonInfo(buttonId, row, col);
-		String msg="#Button"+","+buttonId+","+row+","+col+","+SimpleClient.getClient().getID();
+		String msg="#Button"+","+"ButtonID-"+buttonId+","+"row-"+row+","+"col-"+col+","+"playerID-"+SimpleClient.getClient().getID();
 		System.out.println(msg);
 		try {
 				SimpleClient.getClient().sendToServer(msg);
@@ -90,8 +106,29 @@ public class PrimaryController {
 			e.printStackTrace();
 		}
 	}
-	public void updateMatrix(playerMoveEvent event) throws IOException {
-
+	public Button getButton(String buttonId){
+		Button check=buttonStringMap.get("Button00");
+		System.out.println(check.getId());
+		 if(buttonStringMap.get(buttonId)!=null){
+			 return buttonStringMap.get(buttonId);
+		 }
+		 else {
+			 System.out.println("Button not found");
+			 return null;
+		 }
+    }
+//	public void setButtonText(String buttonId, String text)
+//	{
+//		Button button = buttonStringMap.get(buttonId);
+//		button.setText(text);
+//	}
+	@Subscribe
+	public void onPlayerMove(playerMoveEvent event) {
+		Platform.runLater(()-> {
+			System.out.println("onPlayerMove");
+			Button button = buttonStringMap.get(event.buttonId);
+			System.out.println(button.getId());
+			button.setText(event.player);}
+		);
 	}
-
 }

@@ -15,7 +15,13 @@ public class SimpleServer extends AbstractServer {
 	boolean turn=false;
 	public SimpleServer(int port) {
 		super(port);
-		
+		for(int i=0;i<3;i++)
+		{
+			for(int j=0;j<3;j++)
+			{
+				XOMatrix[i][j]="";
+			}
+		}
 	}
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -56,24 +62,21 @@ public class SimpleServer extends AbstractServer {
 		}
 		if(msgString.startsWith("#Button"))
 		{
-			System.out.println(msgString);
-			String buttonid=msgString.substring(8,16);
-			String col=msgString.substring(19,20);
-			String row=msgString.substring(17,18);
-			String player=msgString.substring(21,22);
+			String buttonid=msgString.substring(17,25);
+			String row=msgString.substring(30,31);
+			String col=msgString.substring(36,37);
+			String player=msgString.substring(47,48);
+			System.out.println("####server player="+player);
 			updateMatrix(player,Integer.parseInt(row),Integer.parseInt(col));
-			System.out.println("in server after matrix update");
+			System.out.println("in server about to check winner");
 			if(isWinner(Integer.parseInt(row),Integer.parseInt(col),player))
 			{
-				sendToAllClients(player+" is the winner");
-				return;
+				sendToAllClients("#newMove,"+player+","+buttonid+","+turn+","+player+" is the winner");
 			}
 			else
 			{
 				turn=!turn;
-				System.out.println("in server winner->else");
-				sendToAllClients("#continue"+","+player+","+turn+","+buttonid);
-				return;
+				sendToAllClients("#newMove,"+player+","+buttonid+","+turn);
 			}
 		}
 	}
@@ -97,47 +100,46 @@ public class SimpleServer extends AbstractServer {
 		int size=3;
 		boolean rowWin = true;
 		for (int c = 0; c < size; c++) {
-			if (!XOMatrix[row][c].equals(player)) {
-				rowWin = false;
+            if (!(XOMatrix[row][c].equals(player))) {
+                rowWin = false;
 				break;
-			}
+            }
 		}
 		if (rowWin) return true;
 
 		// Check the column of the last move
 		boolean colWin = true;
 		for (int r = 0; r < size; r++) {
-			if (!XOMatrix[r][col].equals(player)) {
+			if (!(XOMatrix[r][col].equals(player))) {
 				colWin = false;
 				break;
 			}
 		}
-		if (colWin) return true;
 
+		if (colWin) return true;
 		// Check the main diagonal (if applicable)
 		if (row == col) { // The move is on the main diagonal
 			boolean diagWin = true;
 			for (int i = 0; i < size; i++) {
-				if (!XOMatrix[i][i].equals(player)) {
+				if (!(XOMatrix[i][i].equals(player))) {
 					diagWin = false;
 					break;
 				}
 			}
 			if (diagWin) return true;
 		}
-
 		// Check the anti-diagonal (if applicable)
 		if (row + col == size - 1) { // The move is on the anti-diagonal
 			boolean antiDiagWin = true;
 			for (int i = 0; i < size; i++) {
-				if (!XOMatrix[i][size - 1 - i].equals(player)) {
+				if (!(XOMatrix[i][size - 1 - i].equals(player))) {
 					antiDiagWin = false;
 					break;
 				}
 			}
 			if (antiDiagWin) return true;
 		}
-
 		return false; // No winner found
 	}
+
 }

@@ -7,8 +7,9 @@ public class playerMoveEvent
 	String message;
 	public playerMoveEvent(String message)
 	{
-		this.player =message.substring(12,13);
-		System.out.println(player+"In playerEvent");
+		this.message = message;
+		this.player = message.substring(9,10);
+		this.buttonId = message.substring(11,19);
 		
 	}
 }
