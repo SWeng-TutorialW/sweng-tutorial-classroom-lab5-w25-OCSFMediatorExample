@@ -10,6 +10,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
+import java.awt.*;
 import java.awt.event.InputMethodEvent;
 import java.io.IOException;
 import java.util.HashMap;
@@ -52,8 +55,17 @@ public class PrimaryController {
 	@FXML // fx:id="XOMatrix"
 	private GridPane XOMatrix; // Value injected by FXMLLoader
 
+	@FXML // fx:id="playerTurn"
+	private TextField playerTurn; // Value injected by FXMLLoader
+
+	@FXML // fx:id="Player"
+	private Label Player; // Value injected by FXMLLoader
+
 	@FXML // fx:id="root"
 	private AnchorPane root; // Value injected by FXMLLoader
+	@FXML // fx:id="root"
+
+
 
 	private Map<String,Button> buttonStringMap = new HashMap<String,Button>();
 
@@ -76,7 +88,6 @@ public class PrimaryController {
 			for(Node node : XOMatrix.getChildren())
 			{
 				buttonStringMap.put(node.getId(),(Button)node);
-				System.out.println(node.getId());
 			}
 			SimpleClient.getClient().sendToServer("add client");
 		} catch (IOException e) {
@@ -117,18 +128,33 @@ public class PrimaryController {
 			 return null;
 		 }
     }
-//	public void setButtonText(String buttonId, String text)
-//	{
-//		Button button = buttonStringMap.get(buttonId);
-//		button.setText(text);
-//	}
 	@Subscribe
 	public void onPlayerMove(playerMoveEvent event) {
 		Platform.runLater(()-> {
-			System.out.println("onPlayerMove");
 			Button button = buttonStringMap.get(event.buttonId);
-			System.out.println(button.getId());
-			button.setText(event.player);}
+			playerTurn.setText("Turn: "+event.turn);
+			button.setText(event.player);
+//			if(playerTurn.getText().equals(SimpleClient.getClient().getID()))
+//			{
+//				for (Button a : buttonStringMap.values()) {
+//					button.setDisable(false); // Disable the button
+//				}
+//			}
+//			else
+//			{
+//				for (Button a : buttonStringMap.values()) {
+//					button.setDisable(true); // Enable the button
+//				}
+//			}
+		}
 		);
 	}
+	@Subscribe
+	public void onNewGameEvent(newGameEvent event) {
+		Platform.runLater(()-> {
+					Player.setText("Player: "+event.player);
+				}
+		);
+	}
+
 }

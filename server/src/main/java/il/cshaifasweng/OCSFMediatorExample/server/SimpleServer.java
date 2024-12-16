@@ -71,7 +71,7 @@ public class SimpleServer extends AbstractServer {
 			System.out.println("in server about to check winner");
 			if(isWinner(Integer.parseInt(row),Integer.parseInt(col),player))
 			{
-				sendToAllClients("#newMove,"+player+","+buttonid+","+turn+","+player+" is the winner");
+				sendToAllClients("#newMove,"+player+","+buttonid+","+!turn+","+player+" is the winner");
 			}
 			else
 			{

@@ -65,7 +65,7 @@ public class App extends Application {
     	
     }
     @Subscribe
-    public void onWinEvent(WinEvent event) {
+    public void onWinEvent(WinEvent event) throws IOException {
         Platform.runLater(() -> {
         System.out.println("in App winEvent");
             Alert alert = new Alert(AlertType.INFORMATION);
@@ -75,12 +75,6 @@ public class App extends Application {
             alert.show();
         });
     }
-//    @Subscribe
-//    public void onPlayerMove(playerMoveEvent event)
-//    {
-//        System.out.println("Button id:"+event.buttonId);
-//        controller.getButton(event.buttonId);
-//    }
 	public static void main(String[] args) {
         launch();
     }

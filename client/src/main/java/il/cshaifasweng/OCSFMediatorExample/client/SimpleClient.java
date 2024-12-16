@@ -22,7 +22,7 @@ public class SimpleClient extends AbstractClient {
 		String message = msg.toString();
 		if (message.equals("X") || message.equals("O")) {
 			getClient().setID(message);
-			System.out.format("My ID is :%s%n", ID);
+			EventBus.getDefault().post(new newGameEvent(message));
 		}
 		if(message.startsWith("#newMove,"))
 		{
@@ -42,7 +42,6 @@ public class SimpleClient extends AbstractClient {
 		}
 		return client;
 	}
-
 	public String getID()
 	{
 		return ID;
