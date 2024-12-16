@@ -13,7 +13,6 @@ import java.io.IOException;
 import javafx.event.ActionEvent;
 
 public class PrimaryController {
-
 	@FXML // fx:id="Button00"
 	private Button Button00; // Value injected by FXMLLoader
 
@@ -82,7 +81,7 @@ public class PrimaryController {
 		row = (row == null) ? 0 : row;
 		col = (col == null) ? 0 : col;
 		//SimpleClient.getClient().sendButtonInfo(buttonId, row, col);
-		String msg="#Button"+" "+buttonId+" "+row+" "+col+" "+SimpleClient.getClient().getID();
+		String msg="#Button"+","+buttonId+","+row+","+col+","+SimpleClient.getClient().getID();
 		System.out.println(msg);
 		try {
 				SimpleClient.getClient().sendToServer(msg);
@@ -91,4 +90,8 @@ public class PrimaryController {
 			e.printStackTrace();
 		}
 	}
+	public void updateMatrix(playerMoveEvent event) throws IOException {
+
+	}
+
 }

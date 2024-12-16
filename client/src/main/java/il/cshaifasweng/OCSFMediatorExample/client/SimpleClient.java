@@ -23,10 +23,19 @@ public class SimpleClient extends AbstractClient {
 		if (message.equals("X") || message.equals("O")) {
 			getClient().setID(message);
 			System.out.format("My ID is :%s%n", ID);
-		} else {
-
-			System.out.println(message);
 		}
+		if(message.contains("is winner"))
+		{
+			String winner=message.substring(0,0);
+			System.out.format("the winner is :%s%n", winner);
+			EventBus.getDefault().post(new WinEvent(winner));
+		}
+		if(message.startsWith("#continue"))
+		{
+			System.out.println("in continue");
+			EventBus.getDefault().post(new playerMoveEvent(message));
+		}
+			System.out.println(message);
 	}
 
 	public static SimpleClient getClient() {
@@ -35,17 +44,6 @@ public class SimpleClient extends AbstractClient {
 		}
 		return client;
 	}
-//	public static void sendButtonInfo(String buttonID,int row,int col)
-//	{
-//		System.out.println("Getting button cell with ID: " + buttonID);
-//		String msg="#Button"+" "+buttonID+" "+row+" "+col+" "+ID;
-//		try {
-//				getClient().sendToServer(msg);
-//		}
-//		catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
 
 	public String getID()
 	{

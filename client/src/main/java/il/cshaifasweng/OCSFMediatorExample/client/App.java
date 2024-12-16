@@ -65,6 +65,21 @@ public class App extends Application {
     	});
     	
     }
+    @Subscribe
+    public void onWinEvent(WinEvent event) {
+        System.out.println("in App winEvent");
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Game over");
+            alert.setHeaderText(null);
+            alert.setContentText(event.player+" has won the game");
+            alert.show();
+    }
+
+    @Subscribe
+    public void onPlayerMoveEvent(playerMoveEvent event) {
+        System.out.println("in App player event");
+
+    }
 	public static void main(String[] args) {
         launch();
     }

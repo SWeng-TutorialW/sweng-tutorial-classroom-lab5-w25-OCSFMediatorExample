@@ -2,32 +2,15 @@ package il.cshaifasweng.OCSFMediatorExample.client;
 
 public class playerMoveEvent
 {
+	String player;
+	String buttonId;
 	String message;
-	String playerID;
-	String gridIndex;
-	public void setPlayerID(String playerID) {
-		this.playerID = playerID;
+	public playerMoveEvent(String message)
+	{
+		this.player =message.substring(12,13);
+		System.out.println(player+"in playerEvent");
+		
 	}
-	public String getMessage() {
-		return message;
-	}
-	public void setGridIndex(String gridIndex) {
-		this.gridIndex = gridIndex;
-	}
-	public playerMoveEvent(String message) {
-		this.message = message;
-		if(message.contains("X"))
-		{
-			setPlayerID("X");
-		}
-		else
-		{
-			setPlayerID("O");
-		}
-		int ButtonIndex=message.indexOf("B");
-		setGridIndex(message.substring(ButtonIndex));
-	}
-
 }
 
 
