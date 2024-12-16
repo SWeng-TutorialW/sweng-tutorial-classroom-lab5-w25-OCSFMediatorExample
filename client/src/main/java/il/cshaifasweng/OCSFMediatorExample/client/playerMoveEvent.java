@@ -8,7 +8,7 @@ public class playerMoveEvent
 	public playerMoveEvent(String message)
 	{
 		this.player =message.substring(12,13);
-		System.out.println(player+"in playerEvent");
+		System.out.println(player+"In playerEvent");
 		
 	}
 }
