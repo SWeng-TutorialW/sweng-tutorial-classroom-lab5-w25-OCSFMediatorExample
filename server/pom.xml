@@ -27,6 +27,7 @@
 			<groupId>${groupId}</groupId>
 			<artifactId>entities</artifactId>
 		</dependency>
+
 	</dependencies>
 
 	<build>
