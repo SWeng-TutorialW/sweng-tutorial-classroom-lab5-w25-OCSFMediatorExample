@@ -33,23 +33,23 @@ public class SimpleServer extends AbstractServer {
 		} else {
 			String msgString = (String) msg;
 			if (msgString.startsWith("add client")) {
-					for (SubscribedClient subscribedClient : SubscribersList) {
-						if (subscribedClient.getClient().equals(client)) {
-							SubscribersList.remove(subscribedClient);
-							break;
-						}
+				for (SubscribedClient subscribedClient : SubscribersList) {
+					if (subscribedClient.getClient().equals(client)) {
+						SubscribersList.remove(subscribedClient);
+						break;
 					}
-					return;
 				}
 				SubscribedClient connection = new SubscribedClient(client);
 				SubscribersList.add(connection);
 				try {//assign each client snd its player Symbol
-                    client.sendToClient(current_player);
-                    current_player = "X";
+					client.sendToClient(current_player);
+					current_player = "X";
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
-			} else if (msgString.startsWith("remove client")) {
+				return;
+			}
+			if (msgString.startsWith("remove client")) {
 				if (!SubscribersList.isEmpty()) {
 					for (SubscribedClient subscribedClient : SubscribersList) {
 						if (subscribedClient.getClient().equals(client)) {
@@ -58,12 +58,11 @@ public class SimpleServer extends AbstractServer {
 						}
 					}
 				}
-			    if(SubscribersList.isEmpty()){// the game is over
-                    this.close();
-                }
-            }
+				if (SubscribersList.isEmpty()) {// the game is over
+					this.close();
+				}
+			}
 		}
-
 	}
 
 	//manages turn
@@ -148,3 +147,6 @@ public class SimpleServer extends AbstractServer {
 	}
 
 }
+
+
+
