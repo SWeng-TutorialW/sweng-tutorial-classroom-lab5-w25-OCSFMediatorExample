@@ -11,6 +11,7 @@ import il.cshaifasweng.OCSFMediatorExample.server.ocsf.SubscribedClient;
 
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
+	private int playersNum = 0;
 
 	public SimpleServer(int port) {
 		super(port);
@@ -38,6 +39,16 @@ public class SimpleServer extends AbstractServer {
 				throw new RuntimeException(e);
 			}
 		}
+		else if(msgString.startsWith("#join")){
+			playersNum ++;
+            if(playersNum != 2){
+                return;
+            }
+            else{
+				playersNum = 0; // reset
+                sendToAllClients("The game is ready");
+            }
+        }
 		else if(msgString.startsWith("remove client")){
 			if(!SubscribersList.isEmpty()){
 				for(SubscribedClient subscribedClient: SubscribersList){
