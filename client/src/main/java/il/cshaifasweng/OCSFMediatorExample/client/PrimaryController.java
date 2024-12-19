@@ -4,8 +4,16 @@ import java.io.IOException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import org.greenrobot.eventbus.EventBus;
 
 public class PrimaryController {
+
+	@FXML
+	private Button exitButton;
+
+	@FXML
+	private Button startButton;
 
     @FXML
     void sendWarning(ActionEvent event) {
@@ -16,6 +24,17 @@ public class PrimaryController {
 			e.printStackTrace();
 		}
     }
+
+	@FXML
+	void clientJoinRequest(ActionEvent event) {
+		try {
+			App.setRoot("secondary");
+			SimpleClient.getClient().sendToServer("#join");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	@FXML
 	void initialize(){
