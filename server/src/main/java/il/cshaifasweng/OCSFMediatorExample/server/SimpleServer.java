@@ -33,9 +33,6 @@ public class SimpleServer extends AbstractServer {
 		} else {
 			String msgString = (String) msg;
 			if (msgString.startsWith("add client")) {
-				// if there are already 2 players, remove the new player
-				if(SubscribersList.size() >= 2){
-					System.out.println("cant join new players");
 					for (SubscribedClient subscribedClient : SubscribersList) {
 						if (subscribedClient.getClient().equals(client)) {
 							SubscribersList.remove(subscribedClient);
