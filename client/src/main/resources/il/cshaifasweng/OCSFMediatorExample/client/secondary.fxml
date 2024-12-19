@@ -25,6 +25,6 @@
             <TextField fx:id="myIP" />
          </items>
       </ToolBar>
-      <Button mnemonicParsing="false" text="OK!" />
+      <Button fx:id="okButton" mnemonicParsing="false" onAction="#handleOkButton" text="OK!" />
    </children>
 </VBox>

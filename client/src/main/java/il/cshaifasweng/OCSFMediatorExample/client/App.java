@@ -21,26 +21,45 @@ public class App extends Application {
     private static Scene scene;
     private SimpleClient client;
     private PrimaryController primaryController; // to make changes on event
+    private SecondaryController secondaryController; // to make changes on event
+    private Stage primaryStage;
 
     @Override
     public void start(Stage stage) throws IOException {
-    	EventBus.getDefault().register(this);
-    	//connect to server and get symbol
-        client = SimpleClient.getClient();
-    	client.openConnection();
+        primaryStage = stage;
+
+        EventBus.getDefault().register(this);
+
+        // open initiation gui
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("secondary.fxml"));
+        Parent secondaryRoot = fxmlLoader.load();
+        secondaryController = fxmlLoader.getController();  // will be used to call fxml controller functions later
+        secondaryController.setApp(this);
+
+        // open on screen
+        scene = new Scene(secondaryRoot, 200, 200);
+        stage.setScene(scene);
+        secondaryController.setStage(primaryStage);
+        stage.show();
+
+    }
+    public void startGame(int port, String host) throws Exception {
+        //connect to server and get symbol
+        client = SimpleClient.startClient(port, host);
+        client.openConnection();
         client.sendToServer("add client");
 
         // load the primary FXML file
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("primary.fxml"));
-        Parent root = fxmlLoader.load();
+        Parent primaryRoot = fxmlLoader.load();
         primaryController = fxmlLoader.getController();  // will be used to call fxml controller functions later
         primaryController.set_player_symbol(client.get_player_symbol());
 
         // open game on screen
-        scene = new Scene(root, 200, 200);
-        stage.setScene(scene);
-        primaryController.setStage(stage); // to close on finish
-        stage.show();
+        scene = new Scene(primaryRoot, 200, 200);
+        primaryStage.setScene(scene);
+        primaryController.setStage(primaryStage); // to close on finish
+        primaryStage.show();
     }
 
     static void setRoot(String fxml) throws IOException {
