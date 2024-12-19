@@ -28,11 +28,14 @@ public class SimpleClient extends AbstractClient {
 		return player_symbol;
 	}
 
-	public static SimpleClient getClient() {
+	public static SimpleClient startClient(int port, String host) {
 		if (client == null) {
-			client = new SimpleClient("localhost", 3000);
+			client = new SimpleClient(host, port);
 		}
 		return client;
-	}
 
+	}
+	public static SimpleClient getClient() {
+		return client;
+	}
 }
