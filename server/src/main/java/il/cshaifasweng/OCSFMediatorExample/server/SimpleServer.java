@@ -2,7 +2,6 @@ package il.cshaifasweng.OCSFMediatorExample.server;
 import il.cshaifasweng.OCSFMediatorExample.entities.Turn;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.AbstractServer;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.ConnectionToClient;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -26,7 +25,7 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	@Override
-	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
+	protected void handleMessageFromClient(Object msg, ConnectionToClient client) throws IOException {
 		if (msg instanceof Turn) {
 			Turn turn = (Turn) msg;
 			manage_turn(turn);
@@ -34,9 +33,6 @@ public class SimpleServer extends AbstractServer {
 		} else {
 			String msgString = (String) msg;
 			if (msgString.startsWith("add client")) {
-				// if there are already 2 players
-				if(SubscribersList.size()>=2){
-					System.out.println("Cant Join");
 					for (SubscribedClient subscribedClient : SubscribersList) {
 						if (subscribedClient.getClient().equals(client)) {
 							SubscribersList.remove(subscribedClient);
@@ -47,9 +43,9 @@ public class SimpleServer extends AbstractServer {
 				}
 				SubscribedClient connection = new SubscribedClient(client);
 				SubscribersList.add(connection);
-				try {
-					client.sendToClient(current_player);//for each client snd its player number
-					current_player = "X";
+				try {//assign each client snd its player Symbol
+                    client.sendToClient(current_player);
+                    current_player = "X";
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
@@ -61,9 +57,11 @@ public class SimpleServer extends AbstractServer {
 							break;
 						}
 					}
-
 				}
-			}
+			    if(SubscribersList.isEmpty()){// the game is over
+                    this.close();
+                }
+            }
 		}
 
 	}

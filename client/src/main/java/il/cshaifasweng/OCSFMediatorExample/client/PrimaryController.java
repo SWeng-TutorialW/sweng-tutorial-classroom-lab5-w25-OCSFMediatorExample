@@ -10,11 +10,15 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class PrimaryController {
 	private String player_symbol = ""; // the player's symbol for game management
+
+	@FXML // fx:id="game_over"
+	private Button game_over; // Value injected by FXMLLoader
 
 	@FXML // fx:id="board"
 	private AnchorPane board; // Value injected by FXMLLoader
@@ -45,9 +49,11 @@ public class PrimaryController {
 
 	@FXML // fx:id="upper_right"
 	private Button upper_right; // Value injected by FXMLLoader
+	private Stage stage; // to close the window
+
 	/////////////////////////////// methods
 
-	//sets the player number according to what was received from the server
+	//sets the player symbol according to what was received from the server
 	public void set_player_symbol(String player_symbol) {
 		this.player_symbol = player_symbol;
 		if(player_symbol.equals("X")){// X plays first
@@ -56,7 +62,31 @@ public class PrimaryController {
 		else{
 			disableButtons();
 		}
+		game_over.setVisible(false); // the game over button is invisible
 	}
+	public void game_is_over(String result){
+		disableButtons();// disable all buttons except game over when game is over
+		game_over.setVisible(true);
+		game_over.setDisable(false);
+		if(result.equals("d")){
+			game_over.setText("draw");
+		}
+		else{
+			game_over.setText(result + " won");
+		}
+	}
+
+	@FXML // close the window
+	void close_game(ActionEvent event) {
+		if (stage != null && stage.isShowing()) {
+			stage.close();
+		}
+	}
+
+	public void setStage(Stage stage) {
+		this.stage = stage;
+	}
+
 	// after press, send the player press to the server
 	public void sendTurn(String button_pressed) throws IOException {
 		int x = 0;
